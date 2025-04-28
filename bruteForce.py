@@ -1,5 +1,6 @@
 import itertools
 from functools import reduce
+import time
 
 def sumSubsetVariations(acc, indexAndSubsetId):
     index, subsetId = indexAndSubsetId
@@ -25,9 +26,9 @@ def threePartition(nums):
 
     return None
 
-# Example usage:
 if __name__ == "__main__":
-    nums = [1,9,5,5,3,7]
+    timeBefore = time.time()
+    nums = [1, 9, 5, 5, 3, 7,4,3,5,7,2,1,3,6,9,4,4]
     result = threePartition(nums)
 
     if result:
@@ -36,3 +37,18 @@ if __name__ == "__main__":
             print(f"Group {i+1}: {part}")
     else:
         print("No valid partition found.")
+
+    print(time.time() - timeBefore)
+
+"""
+    [0,0,0,0]
+    [1,0,0,0]
+    [0,1,0,0]
+    [0,0,1,0]
+    [0,0,0,1]
+    
+    [2,0,0,0]
+    [0,2,0,0]
+    [0,0,2,0]
+    [0,0,0,2]
+"""
