@@ -1,6 +1,7 @@
 import math
 import random
-from utils import makeRandomSolution, loss, sumSubset
+from utils import loss, makeRandomSolution, showResults
+import sys
 
 def encode_chromosome(labels, base_power):
     result = []
@@ -30,16 +31,8 @@ def count_base_power(groupNumber):
         power += 1
     return power
 
-def ackley(x):
-    ret = (-20*math.exp(-0.2*math.sqrt(0.5*(x[0]**2 + x[1]**2))) -
-           math.exp(0.5*(
-                   math.cos(x[0]*2*math.pi) + math.cos(2*math.pi*x[1]))
-                    ) + math.e + 20)
-    return ret
-
 def tppFitness(randomSolution, numbers):
     return loss(randomSolution, numbers)
-
 
 def generate_binary_random_solution(labelsLength, basePower):
     ransol = makeRandomSolution(labelsLength)
@@ -145,7 +138,7 @@ def best_element(population, fitness):
     return best
 
 iteration_num = 0
-def main(numbers):
+def main(numbers, maxIteration):
     goal = tppFitness
     groupNumber = len(numbers) // 3
     basePower = count_base_power(groupNumber)
@@ -159,7 +152,7 @@ def main(numbers):
         print(iteration_num,
               decode_chromosome(best_element(population, fitness), basePower),
               [goal(decode_chromosome(e, basePower), numbers) for e in population])
-        return iteration_num < 1000
+        return iteration_num < maxIteration
 
 
     results = genetic_algorithm(lambda : [generate_binary_random_solution(len(numbers), basePower) for i in range(26)],
@@ -171,13 +164,13 @@ def main(numbers):
                       checkSets)
 
     decoded_result = [decode_chromosome(result, basePower) for result in results]
+    print(decoded_result)
     # bestElement = best_element(decoded_result, fitness)
     # print(bestElement)
     # print(sumSubset(bestElement[1], numbers))
 
 
-if __name__ == '__main__':
-    main([20, 23, 25, 30, 49, 45, 27, 30, 30, 40, 22, 19])
-
-# [0, 0, 2, 3, 1, 2, 2, 0, 3, 1, 1, 3]
+if __name__ == "__main__":
+    numbers = [int(arg) for arg in sys.argv[2:]]
+    main(numbers, int(sys.argv[1]))
 
