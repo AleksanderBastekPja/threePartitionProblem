@@ -32,15 +32,3 @@ def main(numbers, iterationAmount):
 if __name__ == "__main__":
     numbers = [int(arg) for arg in sys.argv[2:]]
     main(numbers, int(sys.argv[1]))
-
-
-# def hill_climbing_stochastic(list_to_sort, loss, max_iterations):
-#     current = random_solution(list_to_sort)
-#     for i in range(max_iterations):
-#         neighbours = generate_neighbours(current)
-#         neighbour = neighbours[randint(0,len(neighbours)-1)]
-#         if loss(neighbour) <= loss(current):
-#             current = neighbour
-#         if loss(current) == 0:
-#             return current,i
-#     return current, max_iterations

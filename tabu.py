@@ -8,7 +8,8 @@ def tabu(nums, maxIteration, tabu_size = 100):
     tabu_list = [current.copy()]
 
     for i in range(maxIteration):
-        neighbours = generateNeighbours(current)
+        neighbours = [ n for n in generateNeighbours(current) if n not in tabu_list ]
+        if len(neighbours) == 0: break
         bestSolution = neighbours[0]
 
         for neighbour in neighbours[1:]:
@@ -21,7 +22,6 @@ def tabu(nums, maxIteration, tabu_size = 100):
             tabu_list = tabu_list[-tabu_size:]
         if loss(current, nums) < loss(global_best[-1], nums):
             global_best.append(current)
-
         if loss(current, nums) == 0:
             return current, i
     return current, maxIteration
