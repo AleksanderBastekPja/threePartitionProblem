@@ -1,36 +1,6 @@
-from random import randint
 import time
-
-def sumSubset(randomSolutions, nums):
-    acc = [0, 0, 0]
-    for index, subsetId in enumerate(randomSolutions):
-        acc[subsetId] += nums[index]
-    return acc
-
-
-def loss(randomSolution, nums):
-    sub1, sub2, sub3 = sumSubset(randomSolution, nums)
-    return abs(sub1 - sub2) + abs(sub2 - sub3)
-
-
-def makeRandomSolution(n):
-    return [randint(0, 2) for _ in range(n)]
-
-
-def generateNeighbours(randomSolution):
-    neighbours = []
-    for i in range(len(randomSolution)):
-        randomSolutionCopy = randomSolution.copy()
-        randomSolutionCopy[i] = (randomSolutionCopy[i] + 1) % 3
-        neighbours.append(randomSolutionCopy)
-
-    for i in range(len(randomSolution)):
-        randomSolutionCopy = randomSolution.copy()
-        randomSolutionCopy[i] = (randomSolutionCopy[i] - 1) % 3
-        neighbours.append(randomSolutionCopy)
-
-    return neighbours
-
+from utils import loss, makeRandomSolution, generateNeighbours, showResults
+import sys
 
 def tabu(nums, maxIteration, tabu_size = 100):
     current = makeRandomSolution(len(nums))
@@ -57,21 +27,12 @@ def tabu(nums, maxIteration, tabu_size = 100):
     return current, maxIteration
 
 
-def main(numbers):
+def main(numbers, iterationNumber):
     timeBefore = time.time()
-    result = tabu(numbers, 100)
-    sumSubsetValue = sumSubset(result[0], numbers)
-    itertion = 0
-
-    while(not (sumSubsetValue[0] == sumSubsetValue[1] == sumSubsetValue[2])):
-        result = tabu(numbers, 100)
-        sumSubsetValue = sumSubset(result[0], numbers)
-        itertion += 1
-
-    print(result)
-    print(itertion)
-    print(sumSubset(result[0], numbers))
-    print(time.time() - timeBefore)
+    result = tabu(numbers, iterationNumber)
+    timeAfter = time.time() - timeBefore
+    showResults(numbers, result, timeAfter)
 
 if __name__ == "__main__":
-    main([1, 9, 5, 5, 3, 7,4,3,5,7,2,1,3,6,9,4,4])
+    numbers = [int(arg) for arg in sys.argv[2:]]
+    main(numbers, int(sys.argv[1]))

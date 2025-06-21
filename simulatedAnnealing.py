@@ -1,25 +1,12 @@
 import random
 import time
 import math
-
-def sumSubset(randomSolutions, nums):
-    acc = [0, 0, 0]
-    for index, subsetId in enumerate(randomSolutions):
-        acc[subsetId] += nums[index]
-    return acc
-
-def loss(randomSolution, nums):
-    sub1, sub2, sub3 = sumSubset(randomSolution, nums)
-    return abs(sub1 - sub2) + abs(sub2 - sub3)
-
-def makeRandomSolution(n):
-    return [random.randint(0, 2) for _ in range(n)]
+from utils import loss, makeRandomSolution, showResults
+import sys
 
 def generateNeighbour(randomSolution):
-    difference = [random.randint(-1, 1) for _ in range(len(randomSolution))]
     randomSolutionCopy = randomSolution.copy()
-    for i in range(len(randomSolution)):
-        randomSolutionCopy[i] = (randomSolutionCopy[i] + difference[i]) % 3
+    random.shuffle(randomSolutionCopy)
     return randomSolutionCopy
 
 def simulatedAnnealing(nums, K):
@@ -39,17 +26,17 @@ def simulatedAnnealing(nums, K):
         if loss(e, nums) < loss(minelement, nums):
             minelement = e
 
-    return minelement, V, [loss(e, nums) for e in V]
+    return minelement, len(V)
 
 def T(i):
     return 100.0/i
 
-def main(numbers):
+def main(numbers, iterationNumber):
     timeBefore = time.time()
-    result = simulatedAnnealing(numbers, 10000)
-
-    print(sumSubset(result[0], numbers))
-    print(time.time() - timeBefore)
+    result = simulatedAnnealing(numbers, iterationNumber)
+    timeAfter = time.time() - timeBefore
+    showResults(numbers, result, timeAfter)
 
 if __name__ == "__main__":
-    main([1, 9, 5, 5, 3, 7,4,3,5,7,2,1,3,6,9,4,4])
+    numbers = [int(arg) for arg in sys.argv[2:]]
+    main(numbers, int(sys.argv[1]))
